@@ -9,12 +9,12 @@ export default function Appointment(props) {
     const appointment = props.time ? `Appointment at ${props.time}` :'No Appointments';
     return (
         <article className="appointment">{appointment}
-            <Header time = '' />
             {props.interview ? <Show 
                 interviewer = {props.interview.interviewer} 
                 student = {props.interview.student} 
                 onEdit={() => 'onEdit'} 
                 onDelete={() => 'onDelete'} /> : <Empty onAdd ={() => 'onAdd'}/>}
+                <Header time = '' />
         </article>
     )
 };
