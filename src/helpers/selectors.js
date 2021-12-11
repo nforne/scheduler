@@ -16,3 +16,24 @@ export const getAppointmentsForDay = (state, day) => {
     }
     return daysAppointments;
 };
+
+export const getInterview = (state, interview) => {
+ if (interview !== null) {
+    const interviewerID = interview.interviewer;
+    if (state.interviewers[interviewerID]) {
+        interview['interviewer'] = state.interviewers[interviewerID];
+    }
+ }
+ return interview;
+};
+
+
+// export const getInterview = (elm, interviews) => {
+//  if (elm.interview !== null) {
+//     const interviewerID = elm.interview['interviewer'];
+//     if (interviews[interviewerID]) {
+//         elm.interview['interviewer'] = interviews[interviewerID];
+//     }
+//  }
+//  return elm;
+// };
