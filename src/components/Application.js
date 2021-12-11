@@ -6,65 +6,19 @@ import Appointment from "components/Appointment";
 import axios from 'axios';
 import { getAppointmentsForDay } from "../helpers/selectors";
 
-
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer:{
-        id: 3,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "2pm",
-  },
-  {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Archie Andrews",
-      interviewer:{
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg",
-      }
-    }
-  },
-  {
-    id: 5,
-    time: "4pm",
-  }
-];
-
 export default function Application(props) {
-  // const [days, setDays] = useState([]);
-  // const [day, setDay] = useState("Monday");
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {...appointments}
+    appointments: {}
   });
 
   const setDay = (day) => setState({ ...state, day });
   // const setDays = (days) => setState(prev => ({ ...prev, days }));
   // const setAppointments = (appointments) => setState(prev => ({ ...prev, appointments }));
 
-  let dailyAppointments = getAppointmentsForDay(state, state.day)/*[...appointments]*/
-  // for (const i in state.appointments) {
-  //   dailyAppointments.push(state.appointments[i]);
-  // }
-  console.log({...state.appointments}, dailyAppointments); //-----------------------------------x
-  const parsedAppointments = dailyAppointments.map(elm => <Appointment key={elm.id} {...elm}/>)
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
+  const parsedAppointments = dailyAppointments.map(elm => <Appointment key={elm.id} {...elm}/>);
 
   useEffect(() => {
 
@@ -93,9 +47,7 @@ export default function Application(props) {
       // setDays(all[0].data);
       // setAppointments(all[1].data);
       setState(prev => ({...prev, days: all[0].data, appointments : all[1].data }));
-      
-      // const [first, second] = all;    
-      // console.log(first, second);
+
     });
          
   }, []);
