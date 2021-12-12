@@ -27,7 +27,10 @@ export default function Application(props) {
     // console.log(getInterview(elm, state.interviewers)) //---------------------------------x
     console.log('------------------------------------------------') //---------------------------------x
     console.log(elm) //---------------------------------x
-    return <Appointment key={elm.id} {...elm}/>
+    console.log('------------------------------------------------') //---------------------------------x
+    console.log(getInterview(state, elm.interview)) //---------------------------------x
+
+    return <Appointment key={elm.id} {...elm } {...getInterview(state, elm.interview)}/>
   });
 
   useEffect(() => {
