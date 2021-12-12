@@ -6,7 +6,6 @@ import Empty from "components/Appointment/Empty.js";
 import useVisualMode from "../../hooks/useVisualMode";
 import Form from './Form';
 
-
 export default function Appointment(props) {
     const EMPTY = "EMPTY";
     const SHOW = "SHOW";
@@ -31,7 +30,7 @@ export default function Appointment(props) {
                 interviewer={props.interview.interviewer}
                 />)}
             {mode === CREATE && <Form
-            interviewers={[]}
+            interviewers={props.interviewers}
             onCancel={back}
             onSave={console.log('onSave')} />}
 
