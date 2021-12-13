@@ -20,19 +20,9 @@ export default function Application(props) {
   // const setDays = (days) => setState(prev => ({ ...prev, days }));
   // const setAppointments = (appointments) => setState(prev => ({ ...prev, appointments }));
 
-  const interviewersArray = [];
-  for (const i in state.interviewers) {
-    interviewersArray.push(state.interviewers[i].id);
-  }
-  for (const i of state.days) {
-    i['interviewers'] = interviewersArray; // there is a chance of double booking an interviewer. to be fixed by scheduling them per day.
-  }
-
   const dailyInterviewers = getInterviewersForDay(state, state.day);
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   
-  console.log(state.days[0]) //---------------------------------------x
-
   const parsedAppointments = dailyAppointments.map(elm => {
     return <Appointment key={elm.id} {...elm } {...getInterview(state, elm.interview)} interviewers={dailyInterviewers}/>
   });
