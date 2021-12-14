@@ -5,6 +5,7 @@ import Show from "components/Appointment/Show.js";
 import Empty from "components/Appointment/Empty.js";
 import Status from "components/Appointment/Status.js";
 import Confirm from "components/Appointment/Confirm.js";
+import Error from "components/Appointment/Error.js";
 import useVisualMode from "../../hooks/useVisualMode";
 import Form from './Form';
 
@@ -63,6 +64,10 @@ export default function Appointment(props) {
                 />}
             {mode === PENDING && (<Status 
                 message={'Pending ...'}
+                />)}
+            {mode === ERROR &&(<Error 
+                message={'Oops! Something went wrong. Consider trying again shortly. Thank you!'}
+                onClose={() => props.interview ? transition(SHOW, true) : transition(EMPTY, true)}
                 />)}
             {mode === CONFIRM && (<Confirm 
                 message={'Are you sure you would like to delete?'}
