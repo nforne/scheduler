@@ -23,8 +23,46 @@ export default function Application(props) {
   const dailyInterviewers = getInterviewersForDay(state, state.day);
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   
+  const bookInterview = (id, interview, vcgfn, vObj) => { // vcgfn = view change function, vObj = view Object
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    setState(prev => ({...prev, appointments}))
+    axios.put(`/api/appointments/${id}`, {'interview':interview})
+        .then((res) => {vcgfn(vObj.SHOW); console.log(res.data)})
+        .catch((err) => {vcgfn(vObj.ERROR); console.log(err)})
+  };
+    
+  const cancelInterview = (id, interview, vcgfn, vObj) => { // vcgfn = view change function, vObj = view Object
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    setState(prev => ({...prev, appointments}))
+    axios.delete(`/api/appointments/${id}`, {'interview': interview })
+        .then((res) => {vcgfn(vObj.EMPTY); console.log(res.data)})
+        .catch((err) => {vcgfn(vObj.ERROR); console.log(err)})
+  };
+
+  
+  
   const parsedAppointments = dailyAppointments.map(elm => {
-    return <Appointment key={elm.id} {...elm } {...getInterview(state, elm.interview)} interviewers={dailyInterviewers}/>
+    return <Appointment 
+    key={elm.id} {...elm } 
+    {...getInterview(state, elm.interview)} 
+    interviewers={dailyInterviewers}
+    bookInterview={bookInterview}
+    cancelInterview={cancelInterview}
+    />
   });
 
   useEffect(() => {
@@ -68,8 +106,7 @@ export default function Application(props) {
       />
       </section>
       <section className="schedule">
-        {parsedAppointments}
-        <Appointment time='5pm' />
+        {[...parsedAppointments, <Appointment key={"endOfDay"} time='5pm' />]} 
       </section>
     </main>
   );

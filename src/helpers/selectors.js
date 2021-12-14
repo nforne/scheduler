@@ -48,14 +48,3 @@ export const getInterview = (state, interview) => {
  }
  return interview;
 };
-
-
-// export const getInterview = (elm, interviews) => {
-//  if (elm.interview !== null) {
-//     const interviewerID = elm.interview['interviewer'];
-//     if (interviews[interviewerID]) {
-//         elm.interview['interviewer'] = interviews[interviewerID];
-//     }
-//  }
-//  return elm;
-// };
