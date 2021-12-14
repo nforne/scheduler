@@ -52,8 +52,6 @@ export default function Application(props) {
         .then((res) => {vcgfn(vObj.EMPTY); console.log(res.data)})
         .catch((err) => {vcgfn(vObj.ERROR); console.log(err)})
   };
-
-  
   
   const parsedAppointments = dailyAppointments.map(elm => {
     return <Appointment 
@@ -64,6 +62,7 @@ export default function Application(props) {
     cancelInterview={cancelInterview}
     />
   });
+
 
   useEffect(() => {
 
