@@ -1,49 +1,52 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors.js";
+
 
 export default function useApplicationData(initial) {
 
   const [state, setState] = useState(initial);
-  const [changeTracker, setChangeTracker] = useState(0);
 
   const setDay = (day) => setState({ ...state, day });
   // const setDays = (days) => setState(prev => ({ ...prev, days }));
-  // const setAppointments = (appointments) => setState(prev => ({ ...prev, appointments }));
-//--------------------------------------------------------------------------------------------------x 
-//   const dailyAppointments = getAppointmentsForDay(state, state.day);
+  // const setAppointments = (appointments) => setState(prev => ({ ...prev, appointments })); // for reference
 
-//   const spotsLeft = (state, dailyAppointments) => {
+  const spotsLeft = (state, dailyAppointments) => {
     
-//         let selectedDay = [{}, 'i'];
-//         for (let j = 0; j < state.days.length; j++) {
-//             if (state.days[j].name === state.day) {
-//                 selectedDay = [state.days[j], j];
-//                 break;
-//                 } 
-//             }
-//         let onpenSpots = 0
-//         for (const appointment of dailyAppointments) {
-//             if (appointment.interview === null) {
-//                 onpenSpots += 1;
-//             }
-//         }
+        let selectedDay = [{}, 'i'];
+        for (let j = 0; j < state.days.length; j++) {
+            if (state.days[j].name === state.day) {
+                selectedDay = [state.days[j], j];
+                break;
+                } 
+            }
+        let onpenSpots = 0;
+        for (const appointment of dailyAppointments) {
+            if (appointment.interview === null) {
+                onpenSpots += 1;
+            }
+        }
 
-//         const newDays = (state, day) => {
-//             const days = [...state.days];
-//             if (days[selectedDay[1]].id === day.id) {
-//                 days[selectedDay[1]] = day;
-//             }
-//             return days;
-//         }
+        const newDays = (state, day) => {
+            const days = [...state.days];
+            if (days[selectedDay[1]].id === day.id) {
+                days[selectedDay[1]] = day;
+            }
+            return days;
+        }
         
-//         const day = {...selectedDay[0], spots: onpenSpots}
-//         const days = newDays(state, day)
+        const dayCreate = {...selectedDay[0], spots: onpenSpots - 1}
+        const daysCreate = newDays(state, dayCreate)
 
-//         return [days, day, onpenSpots];
-//     };
+        const dayDelete = {...selectedDay[0], spots: onpenSpots + 1}
+        const daysDelete = newDays(state, dayDelete)
+        
+        return [[daysCreate, dayCreate], [daysDelete, dayDelete], onpenSpots];
+    };
 
-//   const updates = () => spotsLeft(state, dailyAppointments);
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
+  
   
   const bookInterview = (id, interview, vcgfn, vObj) => { // vcgfn = view change function, vObj = view Object
     const appointment = {
@@ -54,11 +57,10 @@ export default function useApplicationData(initial) {
       ...state.appointments,
       [id]: appointment
     };
-
+    const stateDays = state.appointments[id].interview ? [...state.days] : spotsLeft(state, dailyAppointments)[0][0];
     axios.put(`/api/appointments/${id}`, {'interview':interview})
         .then(() => {
-            setChangeTracker(prev => prev + 1);
-            setState(prev => ({...prev, appointments /*, days: updates()[0]*/}));
+            setState(prev => ({...prev, appointments, days: stateDays}));
             vcgfn(vObj.SHOW); 
             })
         .catch((error) => {vcgfn(vObj.ERROR_SAVE, true); console.log(error)})
@@ -73,11 +75,10 @@ export default function useApplicationData(initial) {
       ...state.appointments,
       [id]: appointment
     };
-
     axios.delete(`/api/appointments/${id}`, {'interview': interview })
         .then(() => {
-            setChangeTracker(prev => prev + 1);
-            setState(prev => ({...prev, appointments /*, days: updates()[0]*/})); 
+            const stateDays = spotsLeft(state, dailyAppointments)[1][0];
+            setState(prev => ({...prev, appointments, days: stateDays})); 
             vcgfn(vObj.EMPTY); 
            })
         .catch((error) => {vcgfn(vObj.ERROR_DELETE, true); console.log(error)})
@@ -96,7 +97,7 @@ export default function useApplicationData(initial) {
       }))
     }); 
           
-  }, [changeTracker]);
+  }, []);
   
  return {setDay, bookInterview, cancelInterview, state };
 };
