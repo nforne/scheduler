@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import "components/InterviewerList.scss";
+import PropTypes from 'prop-types';
 
 import InterviewerListItem from "components/InterviewerListItem";
 
+InterviewerList.propTypes = {
+    interviewers: PropTypes.array.isRequired
+  };
+  
 export default function InterviewerList(props) {
     const {value, onChange} = props;
     const parsedInterviewers = props.interviewers.map(element => 

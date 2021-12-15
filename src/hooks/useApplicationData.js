@@ -42,7 +42,7 @@ export default function useApplicationData(initial) {
         const dayDelete = {...selectedDay[0], spots: onpenSpots + 1}
         const daysDelete = newDays(state, dayDelete)
         
-        return [[daysCreate, dayCreate], [daysDelete, dayDelete], onpenSpots];
+        return [daysCreate, daysDelete];
     };
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -57,7 +57,10 @@ export default function useApplicationData(initial) {
       ...state.appointments,
       [id]: appointment
     };
-    const stateDays = state.appointments[id].interview ? [...state.days] : spotsLeft(state, dailyAppointments)[0][0];
+
+    const stateDays = state.appointments[id].interview ? // spots should not be updated if user is editing an existing appointment.
+        [...state.days] : spotsLeft(state, dailyAppointments)[0]; 
+    
     axios.put(`/api/appointments/${id}`, {'interview':interview})
         .then(() => {
             setState(prev => ({...prev, appointments, days: stateDays}));
@@ -77,7 +80,7 @@ export default function useApplicationData(initial) {
     };
     axios.delete(`/api/appointments/${id}`, {'interview': interview })
         .then(() => {
-            const stateDays = spotsLeft(state, dailyAppointments)[1][0];
+            const stateDays = spotsLeft(state, dailyAppointments)[1];
             setState(prev => ({...prev, appointments, days: stateDays})); 
             vcgfn(vObj.EMPTY); 
            })
