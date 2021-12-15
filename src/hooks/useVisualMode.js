@@ -12,9 +12,10 @@ export default function useVisualMode(initial) {
             history.push(newMode);
         }   
     };
-   function back(){
+   function back(replace = false){
+       if (replace) {}
        if (history.length > 1) {
-           history.pop();
+           history.length >= 3 &&  replace ? history.splice(history.length - 2, 2) : history.pop(); 
            setMode(history[history.length - 1]);
         } else {
            setMode(history[0]);

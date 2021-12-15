@@ -15,9 +15,11 @@ export default function Appointment(props) {
     const CREATE = "CREATE";
     const PENDING = 'PENDING';
     const CONFIRM = 'CONFIRM';
-    const ERROR = 'ERROR'
+    const ERROR = 'ERROR';
+    const ERROR_SAVE = 'ERROR_SAVE';
+    const ERROR_DELETE = 'ERROR_DELETE';
     
-    const viewObj = {EMPTY, SHOW, CREATE, PENDING, CONFIRM, ERROR} // to be upgraded
+    const viewObj = {EMPTY, SHOW, CREATE, PENDING, CONFIRM, ERROR, ERROR_SAVE, ERROR_DELETE } // to be upgraded
     const { mode, transition, back } = useVisualMode(
         props.interview ? SHOW : EMPTY
       );
@@ -27,7 +29,7 @@ export default function Appointment(props) {
             student: name,
             interviewer
         };
-        // transition(PENDING);
+        // transition(PENDING); /* check CREATE mode below for currently runing alternative.*/
         props.bookInterview(props.id, interview, transition, viewObj)
     };
 
@@ -53,7 +55,7 @@ export default function Appointment(props) {
                 student={props.interview.student}
                 interviewer={props.interview.interviewer}
                 onEdit={() => transition(CREATE) }
-                onDelete={() => transition(CONFIRM)}
+                onDelete={() => transition(CONFIRM)} // could also take true here for proper Error redirect
                 />)}
             {mode === CREATE && <Form
                 student={props.interview ? props.student : ""}
@@ -65,9 +67,17 @@ export default function Appointment(props) {
             {mode === PENDING && (<Status 
                 message={'Pending ...'}
                 />)}
-            {mode === ERROR &&(<Error 
-                message={'Oops! Something went wrong. Consider trying again shortly. Thank you!'}
-                onClose={() => props.interview ? transition(SHOW, true) : transition(EMPTY, true)}
+            {mode === ERROR &&(<Error // for future use
+                message={ props.interview ? 'Oops! THIS went wrong.' : 'Oops! THAT went wrong.'}
+                onClose={() => props.interview ? transition(SHOW) : transition(EMPTY)}
+                />)}
+            {mode === ERROR_SAVE &&(<Error 
+                message={ 'Oops! Could not save your booking. Something went wrong. Consider trying again shortly. Thank you!'}
+                onClose={() => { back();}}
+                />)}
+            {mode === ERROR_DELETE &&(<Error 
+                message={ 'Oops! Could not delete as requested. Something went wrong. Consider trying again shortly. Thank you!'}
+                onClose={() => { back(true);}}
                 />)}
             {mode === CONFIRM && (<Confirm 
                 message={'Are you sure you would like to delete?'}

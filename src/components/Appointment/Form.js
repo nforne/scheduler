@@ -45,7 +45,7 @@ export default function Form(props) {
         <section className="appointment__card-right">
             <section className="appointment__actions">
             <Button danger onClick={() => {cancel(); props.onCancel();}}>Cancel</Button>
-            <Button confirm onClick={() => student && interviewer ? props.onSave(student, interviewer) : ""}>Save</Button>
+            <Button confirm onClick={() => student && interviewer ? props.onSave(student, interviewer) : alert('Please, enter a name and select an interviewer before saving. Thank you!')}>Save</Button>
             </section>
         </section>
         </main>
