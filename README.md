@@ -16,7 +16,7 @@
 ## Getting Started
 
 - Install all dependencies (using the `npm install` command).
-- Note: The app requires a backend. [here](https://github.com/nforne/scheduler-api.git) is how to set it up.
+- Note: The app requires a backend. [HERE](https://github.com/nforne/scheduler-api.git) is how to set it up.
 
 * npm i /*dependency name*/
 * `Its a react app. So you'll need to install react and all the dependencies.`
