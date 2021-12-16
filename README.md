@@ -11,7 +11,6 @@
 * React
 * Webpack, Babel
 * Axios, WebSockets
-* Axios
 * Storybook, Webpack Dev Server, Jest, Testing Library
 
 ## Getting Started
@@ -20,7 +19,7 @@
 - Note: The app requires a backend. [here](https://github.com/nforne/scheduler-api.git) is how to set it up.
 
 * npm i /*dependency name*/
-* /*Its a react app. So you'll need to install react and all the dependencies.*/
+* `Its a react app. So you'll need to install react and all the dependencies.`
 
 ## Dependencies
 
