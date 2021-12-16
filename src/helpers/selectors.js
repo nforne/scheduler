@@ -38,7 +38,6 @@ export const getInterviewersForDay = (state, day) => {
 };
 
 
-
 export const getInterview = (state, interview) => {
  if (interview !== null) {
     const interviewerID = interview.interviewer;
