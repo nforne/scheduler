@@ -9,11 +9,6 @@ export default function Form(props) {
     const [interviewer, setInterviewer] = useState(props.interviewer || null);
     const [error, setError] = useState(["", "",""]);
 
-    // const reset = () => {
-    //     setInterviewer('');
-    //     setStudent('');
-    // };
-
     const validate = () => {
         if (student && interviewer) {
             setError(["", "",""]);
@@ -43,7 +38,6 @@ export default function Form(props) {
                 placeholder="Enter Student Name"
                 /*
                 This must be a controlled component
-                your code goes here
                 */
                 data-testid="student-name-input"
                 value = {student}
@@ -53,7 +47,6 @@ export default function Form(props) {
             </form>
             <section className="appointment__validation">{error[1]}</section>
             <InterviewerList 
-            /* your code goes here */
             interviewers = {props.interviewers}
             value = {interviewer}
             onChange = {setInterviewer}
